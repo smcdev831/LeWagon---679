@@ -1,6 +1,6 @@
 def sum_odd_indexed(array)
   # TODO: computes the sum of elements at odd indexes (1, 3, 5, 7, etc.)
-  # You should use #each_with_index
+  #       You should use Enumerable#each_with_index
   sum = 0
   array.each_with_index do |number, index|
     sum += number if index.odd? == true
@@ -29,7 +29,7 @@ end
 def add_bang(array)
   # TODO: Take an array of strings and return a new array with "!" appended to each string.
   #       You should use Enumerable#map
-  array.map { |words| "#{words}!" }
+  array.map { |word| "#{word}!" }
 end
 
 def concatenate(array)
@@ -42,6 +42,6 @@ def sorted_pairs(array)
   # TODO: Reorganize an array into slices of 2 elements, and sort each slice alphabetically.
   #       You should use of Enumerable#each_slice
   sorting = []
-  array.each_slice(2) { |pairs| sorting << pairs.sort }
+  array.each_slice(2) { |pair| sorting << pair.sort }
   return sorting
 end
