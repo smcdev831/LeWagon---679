@@ -7,3 +7,5 @@ def tag(tag_name, attributes = nil)
     return "<#{tag_name} #{attributes.first}=\"#{attributes.last}\">#{yield}</#{tag_name}>"
   end
 end
+
+#had to add in the antislash manually??
