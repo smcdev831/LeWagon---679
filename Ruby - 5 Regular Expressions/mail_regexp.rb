@@ -10,16 +10,9 @@ end
 
 def group_by_tld(emails)
   # TODO: return a Hash with emails grouped by TLD
-  valid_email = {}
-  emails.each do |email|
-    tld = email.match(/[^.]([a-z]+)$/)[0]
-    if valid_email[tld].nil?
-      valid_email[tld] = [email]
-    else
-      valid_email[tld] << email
-    end
+  emails.group_by do |email|
+    email.match(/.(\w+)$/)[1]
   end
-  emails_hash
 end
 
 def compose_mail(email)
