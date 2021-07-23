@@ -10,22 +10,29 @@ def clean_database(emails)
   # email.each { |email| valid_emails << email if valid?(email) }
   # valid_emails
 end
+
 def group_by_tld(emails)
   emails.group_by do |email|
     email.match(/.(\w+)$/)[1]
   end
 end
-def compose_mail(email)
+
+def compose_translated_email(email)
   # TODO: return a Hash with username, domain and tld extracted from email
-  regez = /^(?<username>\w+).(?<domain>\w+).(?<tld>\w+)/
-  db_hash = {}
-  match_data = email.match(regez)
-  db_hash[:username] = match_data[:username]
-  db_hash[:domain] = match_data[:domain]
-  db_hash[:tld] = match_data[:tld]
-  db_hash
-end
-LOCALES = {
+  # TODO: translate subject, body, closing and signature, according to TLD
+  # Extract information from the email with capture groups
+  match_data = email.match(/^(?<name>\w+)@(?<domain>\w+).(?<tld>\w+)$/)
+  # Compose the returned hash
+  return {
+    username: match_data[:name],
+    domain: match_data[:domain],
+    tld: match_data[:tld],
+    subject: translate(:subject, match_data[:tld]), # Use the translate method to pick information from LOCALES
+    body: translate(:body, match_data[:tld]),
+    closing: translate(:closing, match_data[:tld]),
+    signature: translate(:signature, match_data[:tld])
+  }
+endLOCALES = {
   en: {
     subject: "Our website is online",
     body: "Come and visit us!",
@@ -45,33 +52,31 @@ LOCALES = {
     signature: "Das Team"
   }
 }
-# How to condense below code?
-def compose_translated_email(email)
-  # 1. Extract username, domain, TLD from the email
-  translated_hash = {}
-  translated_hash[:username] = email.match(/^(\w+)[^@]/)[0]
-  translated_hash[:domain] = email.match(/(?<=@)(.*)(?=\.)/)[0]
-  translated_hash[:tld] = email.match(/[^.]([a-z]+)$/)[0]
-  # 2. Infer the language of the user from the TLD
-  LOCALES.each do
-    case translated_hash[:tld]
-    when 'fr'
-      translated_hash[:subject] = LOCALES[:fr][:subject]
-      translated_hash[:body] = LOCALES[:fr][:body]
-      translated_hash[:closing] = LOCALES[:fr][:closing]
-      translated_hash[:signature] = LOCALES[:fr][:signature]
-    when 'de'
-      translated_hash[:subject] = LOCALES[:de][:subject]
-      translated_hash[:body] = LOCALES[:de][:body]
-      translated_hash[:closing] = LOCALES[:de][:closing]
-      translated_hash[:signature] = LOCALES[:de][:signature]
-    else
-      translated_hash[:subject] = LOCALES[:en][:subject]
-      translated_hash[:body] = LOCALES[:en][:body]
-      translated_hash[:closing] = LOCALES[:en][:closing]
-      translated_hash[:signature] = LOCALES[:en][:signature]
-    end
+# Translates a sentence:
+# Picks the corresponding translation in LOCALES, given a keyword and a language:
+# 1. Dive into the enclosed Hash correponding to the language (falls back to :en if not found)
+# 2. In that language Hash, retrieve the value corresponding to the keyword
+def translate(keyword, language)
+  if LOCALES[language.to_sym].nil?
+    translations = LOCALES[:en]
+  else
+    translations = LOCALES[language.to_sym]
   end
-  # 3. Return translated hash for each language
-  p translated_hash
+  return translations[keyword]
+end
+def compose_translated_email(email)
+  # TODO: return a Hash with username, domain and tld extracted from email
+  # TODO: translate subject, body, closing and signature, according to TLD
+  # Extract information from the email with capture groups
+  match_data = email.match(/^(?<name>\w+)@(?<domain>\w+).(?<tld>\w+)$/)
+  # Compose the returned hash
+  return {
+    username: match_data[:name],
+    domain: match_data[:domain],
+    tld: match_data[:tld],
+    subject: translate(:subject, match_data[:tld]), # Use the translate method to pick information from LOCALES
+    body: translate(:body, match_data[:tld]),
+    closing: translate(:closing, match_data[:tld]),
+    signature: translate(:signature, match_data[:tld])
+  }
 end
