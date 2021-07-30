@@ -11,8 +11,7 @@ class OrangeTree
   def one_year_passes!
     unless dead?
       @age += 1
-      life_status
-      @height += 1 until @age == 10
+      @height += 1 until @height == 10
 
       fruit_production
       life_status
@@ -26,7 +25,7 @@ class OrangeTree
   def life_status
     if @age <= 50
       @dead = false
-    elsif @age < 50 && @age <= 100
+    elsif @age > 50 && @age <= 100
       @dead = [true, false].sample
     else
       @dead = true
@@ -36,14 +35,14 @@ class OrangeTree
   def fruit_production
     if @age >= 10 && @age < 15
       @fruits = 200
-    elsif @age >= 5 && @age < 10
+    elsif @age > 5 && @age < 10
       @fruits = 100
     else
       @fruits = 0
     end
   end
 
-  def pick_a_fruit
-    @fruits -= 1 if @fruits.positive? && alive?
+  def pick_a_fruit!
+    @fruits -= 1 if @fruits.positive? && @dead == false
   end
 end
