@@ -11,12 +11,12 @@ class View
   end
 
   def the_recipe_name
-    puts "What is the name of the recipe?"
+    puts "What are we cooking?"
     gets.chomp
   end
 
   def the_recipe_description
-    puts "What is the description of the recipe?"
+    puts "What are the ingredients and steps?"
     gets.chomp
   end
 end
