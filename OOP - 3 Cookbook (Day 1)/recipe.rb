@@ -5,3 +5,11 @@ class Recipe
     @description = description
   end
 end
+
+class Cookbook
+  def initialize(csv_file_path)
+    all
+    add_recipe(recipe)
+    remove_recipe(recipe_index)
+  end
+end
