@@ -1,10 +1,3 @@
-controller.rb
-Last month
-Jul 3
-S
-You uploaded an item
-Unknown File
-controller.rb
 require_relative "view"
 require 'open-uri'
 require 'nokogiri'
