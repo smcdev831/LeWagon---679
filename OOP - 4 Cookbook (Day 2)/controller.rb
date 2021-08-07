@@ -1,4 +1,13 @@
-require "view"
+controller.rb
+Last month
+Jul 3
+S
+You uploaded an item
+Unknown File
+controller.rb
+require_relative "view"
+require 'open-uri'
+require 'nokogiri'
 
 class Controller
   def initialize(cookbook)
@@ -21,5 +30,27 @@ class Controller
   def destroy
     index = @view.recipe_selector
     @cookbook.remove_recipe(index)
+  end
+
+  def import
+    ingredient = @view.search_recipe
+    url = open("https://www.allrecipes.com/search/results/?sort=re&wt=#{ingredient}").read
+    doc = Nokogiri::HTML(url)
+
+    recipes = []
+
+    arrecipe = doc.search(".fixed-recipe-card").first(5)
+    arrecipe.map do |recipe|
+      name = recipe.search(".fixed-recipe-card__h3").text.strip
+      description = recipe.search(".fixed-recipe-card__description").text.strip
+      rating = recipe.search(".stars").attribute('data-ratingstars').value.to_f.round(2)
+      recipe = Recipe.new(name, description, rating)
+      recipes << recipe
+    end
+
+    @view.display(recipes)
+
+    index = @view.add_search
+    @cookbook.add_recipe(recipes[index])
   end
 end
