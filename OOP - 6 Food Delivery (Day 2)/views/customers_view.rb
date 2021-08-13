@@ -1,17 +1,13 @@
 class CustomersView
   def display(customers)
     customers.each_with_index do |customer, index|
-      puts "#{customer.name}, ID Number #{index + 1} lives at #{customer.address}"
+      puts "#{index + 1}. #{customer.name} : #{customer.address}"
     end
   end
 
-  def ask_address
-    puts "What is the address of the customer?"
-    gets.chomp
-  end
-
-  def ask_name
-    puts "What is the name of the customer?"
-    gets.chomp
+  def ask_user_for(stuff)
+    puts "#{stuff.capitalize}?"
+    print "> "
+    return gets.chomp
   end
 end
