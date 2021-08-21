@@ -1,30 +1,29 @@
-require 'sqlite3'
-
 class Post
-  attr_reader :id, :votes
-  attr_accessor :title, :url
+  attr_reader :id
+  attr_accessor :title, :url, :votes
 
   def initialize(attributes = {})
-    @title = attributes[:title]
     @id = attributes[:id]
-    @url = attributes[:url]
-    @votes = attributes[:votes] || 0
+    @votes = attributes[:votes]
+    @title = attributes[:title]
+    @url = attributes[:url] || 0
+  end
+
+  def self.find(id)
+    DB.results_as_hash = true
+    found = DB.execute("SELECT * FROM posts WHERE id = ?", id).first
+    Post.new(id: found["id"], title: found["title"], url: found["url"], votes: found["votes"]) if found
   end
 
   def self.all
-    DB.results_as_hash = true
-    DB.execute("SELECT * FROM posts").map do |values|
-      attributes = {
-        id: values["id"],
-        title: values["title"],
-        url: values["url"],
-        votes: values["votes"]
-      }
-      post = Post.new(attributes)
-    end
-
-    def self.find
-      DB.execute()
+    found = DB.execute('SELECT * FROM posts')
+    found.map do |posting|
+      Post.new(
+        id: posting["id"],
+        title: posting["title"],
+        url: posting["url"],
+        votes: posting["votes"]
+      )
     end
   end
 end
