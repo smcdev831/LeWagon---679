@@ -1,9 +1,12 @@
 require 'json'
 require 'rest-client'
+
 top_stories = "https://hacker-news.firebaseio.com/v0/topstories.json"
+
 def stories(id)
   "https://hacker-news.firebaseio.com/v0/item/#{id}.json"
 end
+
 posts_ids = JSON.parse(RestClient.get(top_stories))
 posts_ids.take(10).each do |id|
   hacker_news_post = JSON.parse(RestClient.get(stories(id)))
