@@ -1,0 +1,17 @@
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Poppins:300,400,500,700");
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  background-color: teal;
+}
+
+h1 {
+  font-size: medium;
+  color: black;
+}
+
+li {
+  text-align: center;
+  color: hotpink;
+}
